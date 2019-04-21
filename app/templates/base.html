@@ -5,7 +5,7 @@
 {% endblock %}
 {% block navbar %}
 <div class="nav">
-    <button type="button" class="btn btn-default" aria-label="Left Align">
+    <!-- <button type="button" class="btn btn-default" aria-label="Left Align">
       <span class="glyphicon glyphicon-globe" aria-hidden="true"> </span>
       <a href="/index">View Homepage</a>
     </button>
@@ -13,7 +13,14 @@
     <button type="button" class="btn btn-default" aria-label="Left Align">
       <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
       <a href="/login">Login</a>
-    </button>
+    </button> -->
+
+    <a href="{{ url_for('index') }}">Home</a>
+    {% if current_user.is_anonymous %}
+    <a href="{{ url_for('login') }}">Login</a>
+    {% else %}
+    <a href="{{ url_for('logout') }}">Logout</a>
+    {% endif %}
 </div>
 {% endblock %}}
 
