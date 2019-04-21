@@ -1,21 +1,9 @@
-import os
-import tempfile
-
 import pytest
+from conftest import client
 
-from app import app
+def test_assert():
+    assert True
 
-
-@pytest.fixture
-def client():
-    db_fd, app.app.config['DATABASE'] = tempfile.mkstemp()
-    app.app.config['TESTING'] = True
-    client = app.app.test_client()
-
-    with app.app.app_context():
-        app.init_db()
-
-    yield client
-
-    os.close(db_fd)
-    os.unlink(app.app.config['DATABASE'])
+def test_index(client):
+    response = client.get('/index')
+    assert response.status_code == 200
