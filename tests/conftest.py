@@ -3,7 +3,7 @@ import tempfile
 
 import pytest
 
-from app import app
+from laneck.app import app
 
 @pytest.fixture
 def client():
