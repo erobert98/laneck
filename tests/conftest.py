@@ -3,7 +3,7 @@ import tempfile
 
 import pytest
 
-from app.app import app
+import app
 
 
 @pytest.fixture
