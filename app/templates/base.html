@@ -1,0 +1,38 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    {% if title %}{{ title }} - Laneck Entertainment {% else %}Welcome to Laneck Entertainment Tools{% endif %}
+{% endblock %}
+{% block navbar %}
+<div class="nav">
+    <button type="button" class="btn btn-default" aria-label="Left Align">
+      <span class="glyphicon glyphicon-globe" aria-hidden="true"> </span>
+      <!-- <a href="/twitters">View Pol</a> -->
+    </button>
+   
+    <button type="button" class="btn btn-default" aria-label="Left Align">
+      <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+      <!-- <a href="/index">View Stats</a> -->
+    </button>
+</div>
+{% endblock %}}
+
+
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
+
+
+
+
