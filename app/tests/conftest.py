@@ -21,7 +21,7 @@
 
 
 # from app import app
-from app import app
+import app
 import pytest 
 
 @pytest.fixture
