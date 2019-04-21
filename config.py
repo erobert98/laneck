@@ -9,3 +9,4 @@ class Testing(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     SQLALCHEMY_DATABASE_URI = 'postgres://mostvftkkintch:aa584aafc230fdea601e382a5360d8dd81468b2041af23bd04fe3962c11839c8@ec2-54-225-113-7.compute-1.amazonaws.com:5432/dcv8jg8t9aedpn' 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    CSRF_ENABLED = False
