@@ -20,11 +20,12 @@
 #     os.unlink(app.app.config['SQLALCHEMY_DATABASE_URI'])
 
 
-# from flask import Flask
-from app import app
+# from app import app
+from flask import Flask
 import pytest 
 
 @pytest.fixture
 def client():
+  app = Flask(__name__) 
   client = app.test_client()
   return client
