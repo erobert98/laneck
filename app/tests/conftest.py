@@ -3,7 +3,7 @@ import tempfile
 
 import pytest
 
-from laneck.app import app
+from app import app
 
 
 @pytest.fixture
@@ -18,4 +18,4 @@ def client():
     yield client
 
     os.close(db_fd)
-    os.unlink(app.app.config['DATABASE'])
+    os.unlink(app.app.config['SQLALCHEMY_DATABASE_URI'])
