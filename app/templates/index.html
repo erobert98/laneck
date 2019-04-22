@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block app_content %}
+    {% if current_user.is_authenticated %}
+    Welcome {{ current_user.username }}!
+    {% endif %}
     <h1>Welcome To Atlantic Beats!!</h1>
     <a href='https://soundcloud.com/atlantic-beats'>Check out my soundcloud</a>
 {% endblock %}

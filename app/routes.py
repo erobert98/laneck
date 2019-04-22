@@ -15,7 +15,6 @@ def before_first_request():
     user_datastore.find_or_create_role(name='end-user', description='End user')
     db.session.commit()
 
-@app.route('/')
 @app.route('/index')
 # @login_required
 def index():
@@ -33,8 +32,7 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        flash(f'Sucessfully logged in {user.username}')
+        login_user(user, remember=form.remember_me.data, force=True)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
@@ -62,13 +60,13 @@ def register():
 
 
 
-@app.before_first_request
-def restrict_admin_url():
-    endpoint = 'admin.index'
-    url = url_for(endpoint)
-    admin_index = app.view_functions.pop(endpoint)
+# @app.before_first_request
+# def restrict_admin_url():
+#     endpoint = 'admin.index'
+#     url = url_for(endpoint)
+#     admin_index = app.view_functions.pop(endpoint)
 
-    @app.route(url, endpoint=endpoint)
-    @roles_accepted('admin')
-    def secure_admin_index():
-        return admin_index()
+#     @app.route(url, endpoint=endpoint)
+#     @roles_accepted('admin')
+#     def secure_admin_index():
+#         return admin_index()

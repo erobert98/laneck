@@ -2,7 +2,7 @@ def test_assert():
     assert True
 
 def test_home_page(client):
-  response = client.get('/')
+  response = client.get('/index')
   assert response.status_code == 200
 
 def test_login(client):
