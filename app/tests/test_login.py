@@ -11,5 +11,6 @@ def test_login(client):
         print(U.email)
         print(current_user.is_authenticated)
         response = client.get('/login')
+        print(request.path)
         assert request.path == url_for('index')
 
