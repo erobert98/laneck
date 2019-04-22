@@ -1,15 +1,18 @@
 from flask import render_template, flash, redirect, request, url_for
-from app import app, db, user_datastore
+from app import app, db
 from app.forms import LoginForm, RegistrationForm
-from app.models import User
+from app.models import User, Role
 from werkzeug.urls import url_parse
 from flask_login import logout_user, current_user, login_user, login_required
+from flask_security import SQLAlchemyUserDatastore
 
 
 @app.before_first_request
 def before_first_request():
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     user_datastore.find_or_create_role(name='admin', description='Administrator')
     user_datastore.find_or_create_role(name='end-user', description='End user')
+    db.session.commit()
 
 @app.route('/')
 @app.route('/index')
