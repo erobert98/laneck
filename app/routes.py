@@ -15,6 +15,7 @@ def before_first_request():
     user_datastore.find_or_create_role(name='end-user', description='End user')
     db.session.commit()
 
+@app.route('/')
 @app.route('/index')
 # @login_required
 def index():
