@@ -26,10 +26,7 @@ def test_logout(client):
 def test_doubleLogin(client):
     with app.test_request_context():
         U = User.query.first()
-        login_user(U)
-        print(U.email)
-        print(current_user.is_authenticated)
+        login_user(U, force=True)
         response = client.get('/login')
-        print(request.path)
-        assert request.path == '/index'
+        assert request.endpoint == 'index'
 

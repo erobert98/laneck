@@ -1,12 +1,11 @@
 from flask import render_template, flash, redirect, request, url_for
 from app import app, db
 from app.forms import LoginForm, RegistrationForm
-from app.models import User, Role
+from app.models import User, Role, Post
 from werkzeug.urls import url_parse
 from flask_login import logout_user, current_user, login_user, login_required
 from flask_security import SQLAlchemyUserDatastore, roles_accepted
-
-
+import math
 
 @app.before_first_request
 def before_first_request():
@@ -71,3 +70,21 @@ def register():
 #     @roles_accepted('admin')
 #     def secure_admin_index():
 #         return admin_index()
+
+@app.route('/music', methods=['GET', 'POST'])
+def music():
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.paginate(page, 10, False)
+    P = Post.query.count()
+    last_page = math.ceil(int(P) / int(10))
+    print(last_page)
+    page_url = "url_for('music', page="
+    next_url = url_for('music', page=posts.next_num) \
+      if posts.has_next else None
+    prev_url = url_for('music', page=posts.prev_num) \
+      if posts.has_prev else None
+
+    return render_template('music.html', confirmed_posts = P, posts = posts.items, cols =['URL','Name','Article Titles'], page = page, next_url=next_url, prev_url=prev_url, last_page=last_page)
+
+
+
