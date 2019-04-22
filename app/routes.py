@@ -1,12 +1,15 @@
 from flask import render_template, flash, redirect, request, url_for
-from app import app, db
+from app import app, db, user_datastore
 from app.forms import LoginForm, RegistrationForm
 from app.models import User
 from werkzeug.urls import url_parse
 from flask_login import logout_user, current_user, login_user, login_required
 
 
-
+@app.before_first_request
+def before_first_request():
+    user_datastore.find_or_create_role(name='admin', description='Administrator')
+    user_datastore.find_or_create_role(name='end-user', description='End user')
 
 @app.route('/')
 @app.route('/index')
