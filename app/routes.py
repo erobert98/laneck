@@ -4,7 +4,8 @@ from app.forms import LoginForm, RegistrationForm
 from app.models import User, Role
 from werkzeug.urls import url_parse
 from flask_login import logout_user, current_user, login_user, login_required
-from flask_security import SQLAlchemyUserDatastore
+from flask_security import SQLAlchemyUserDatastore, roles_accepted
+
 
 
 @app.before_first_request
@@ -33,6 +34,7 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
+        flash(f'Sucessfully logged in {user.username}')
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
@@ -57,3 +59,16 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+
+
+@app.before_first_request
+def restrict_admin_url():
+    endpoint = 'admin.index'
+    url = url_for(endpoint)
+    admin_index = app.view_functions.pop(endpoint)
+
+    @app.route(url, endpoint=endpoint)
+    @roles_accepted('admin')
+    def secure_admin_index():
+        return admin_index()
