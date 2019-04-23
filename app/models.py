@@ -43,6 +43,8 @@ class User(UserMixin, db.Model):
     def isAdmin(self):
         if 'admin' in self.roles:
             return True
+        else:
+            return False
 
     def __repr__(self):
         return '<User {}>'.format(self.username)   
