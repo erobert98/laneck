@@ -41,7 +41,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def isAdmin(self):
-        if self.roles == 'admin':
+        if 'admin' in self.roles:
             return True
 
     def __repr__(self):
