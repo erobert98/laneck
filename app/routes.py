@@ -1,11 +1,27 @@
-from flask import render_template, flash, redirect, request, url_for
+from flask import render_template, flash, redirect, request, url_for, send_from_directory
 from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from app.models import User, Role, Post
 from werkzeug.urls import url_parse
 from flask_login import logout_user, current_user, login_user, login_required
 from flask_security import SQLAlchemyUserDatastore, roles_accepted
+from werkzeug.utils import secure_filename
 import math
+import os
+from functools import wraps
+
+
+def requires_roles(*roles):
+    def wrapper(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            print(current_user)
+            if current_user.roles not in roles:
+                flash("That page requires admin access")
+                return render_template('index.html')
+            return f(*args, **kwargs)
+        return wrapped
+    return wrapper
 
 @app.before_first_request
 def before_first_request():
@@ -84,7 +100,50 @@ def music():
     prev_url = url_for('music', page=posts.prev_num) \
       if posts.has_prev else None
 
-    return render_template('music.html', confirmed_posts = P, posts = posts.items, cols =['URL','Name','Article Titles'], page = page, next_url=next_url, prev_url=prev_url, last_page=last_page)
+    return render_template('music.html', confirmed_posts = P, posts = posts.items, cols =['Song Name'], page = page, next_url=next_url, prev_url=prev_url, last_page=last_page)
 
+@app.route('/upload', methods=['GET', 'POST'])
+@login_required
+@requires_roles('admin')
+def upload_file():
+    print(current_user.roles) #returns either admin or end-user but next line always goes through?
+    # if current_user.roles is 'admin':
+    APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+    UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/music')
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and not allowed_file(file.filename):
+            flash('Unsupported File Type')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            print('succesful upload')
+            return redirect(url_for('uploaded_file',
+                                    filename=filename))
+    return render_template('upload.html')
+
+    
+
+        
+@app.route('/music/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in (app.config['ALLOWED_EXTENSIONS'])
 
 
