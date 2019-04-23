@@ -16,7 +16,7 @@ def requires_roles(*roles):
         @wraps(f)
         def wrapped(*args, **kwargs):
             print(current_user)
-            if current_user.roles not in roles:
+            if current_user.isAdmin():
                 flash("That page requires admin access")
                 return render_template('index.html')
             return f(*args, **kwargs)

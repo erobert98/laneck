@@ -12,6 +12,10 @@ class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
+
+    def isAdmin(self):
+        if self.name == 'admin':
+            return True
     
     def __repr__(self):
         return '<Role {}>'.format(self.name)   
@@ -35,6 +39,10 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def isAdmin(self):
+        if self.roles == 'admin':
+            return True
 
     def __repr__(self):
         return '<User {}>'.format(self.username)   
