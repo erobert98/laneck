@@ -45,7 +45,6 @@ class User(UserMixin, db.Model):
             return True
         else:
             return False
-
     def __repr__(self):
         return '<User {}>'.format(self.username)   
 
