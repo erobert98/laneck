@@ -121,8 +121,7 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             if store_fileInfo(filename, name, user): #creates db entry for song e
                 print('succesful upload')
-                return redirect(url_for('uploaded_file',
-                                    filename=filename))
+                return redirect(url_for('music'))
             else:
                 flash('Song already exists in the database')
                 return redirect(request.url)

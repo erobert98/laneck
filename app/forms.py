@@ -30,6 +30,6 @@ class RegistrationForm(FlaskForm):
 
 
 class UploadForm(FlaskForm):
-    file = FileField('File Name')
-    text = StringField('Song Name')
+    file = FileField('File Name',validators=[DataRequired()])
+    text = StringField('Song Name', validators=[DataRequired()])
     submit = SubmitField('Upload File')
