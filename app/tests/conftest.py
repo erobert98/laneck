@@ -7,3 +7,8 @@ def client():
   return client
 
   
+# def admin_login(client):
+#     return client.post('/login', data=dict(
+#         username='admin',
+#         password='admin'
+#     ), follow_redirects=True)

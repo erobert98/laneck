@@ -17,4 +17,8 @@ def test_logout(client):  #redirect from logout when not logged in
 def test_fail(client):
   response = client.get('/12321')
   assert response.status_code == 404
+
+def test_posts(client):
+  response = client.get('/posts')
+  assert response.status_code == 200
   

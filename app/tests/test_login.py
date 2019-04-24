@@ -25,8 +25,9 @@ def test_logout(client):
 
 def test_doubleLogin(client):
     with app.test_request_context():
-        U = User.query.first()
-        login_user(U, force=True)
+        login(client, 'user', 'user')
         response = client.get('/login')
-        assert request.endpoint == 'index'
+        var = response.data
+        assert b''  in response.data 
 
+#all tests are dogshit good job emile, never stores shit 

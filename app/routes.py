@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, request, url_for, send_from_directory
 from app import app, db
 from app.forms import LoginForm, RegistrationForm
-from app.models import User, Role, Post
+from app.models import User, Role, Post, Song
 from werkzeug.urls import url_parse
 from flask_login import logout_user, current_user, login_user, login_required
 from flask_security import SQLAlchemyUserDatastore, roles_accepted
@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import math
 import os
 from functools import wraps
+from app.file_util import store_fileInfo
 
 
 def requires_roles(*roles):
@@ -87,20 +88,20 @@ def register():
 #     def secure_admin_index():
 #         return admin_index()
 
-@app.route('/music', methods=['GET', 'POST'])
-def music():
+@app.route('/posts', methods=['GET', 'POST'])
+def posts():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.paginate(page, 10, False)
     P = Post.query.count()
     last_page = math.ceil(int(P) / int(10))
     print(last_page)
     page_url = "url_for('music', page="
-    next_url = url_for('music', page=posts.next_num) \
+    next_url = url_for('posts', page=posts.next_num) \
       if posts.has_next else None
-    prev_url = url_for('music', page=posts.prev_num) \
+    prev_url = url_for('posts', page=posts.prev_num) \
       if posts.has_prev else None
 
-    return render_template('music.html', confirmed_posts = P, posts = posts.items, cols =['Song Name'], page = page, next_url=next_url, prev_url=prev_url, last_page=last_page)
+    return render_template('posts.html', confirmed_posts = P, posts = posts.items, cols =['Song Name'], page = page, next_url=next_url, prev_url=prev_url, last_page=last_page)
 
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
@@ -109,7 +110,7 @@ def upload_file():
     print(current_user.roles) #returns either admin or end-user but next line always goes through?
     # if current_user.roles is 'admin':
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-    UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/music')
+    UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static')
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     if request.method == 'POST':
         # check if the post request has the file part
@@ -117,8 +118,8 @@ def upload_file():
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
+        name = request.form['text']
+        user = current_user.id
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
@@ -128,15 +129,34 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print('succesful upload')
-            return redirect(url_for('uploaded_file',
+            if store_fileInfo(filename, name, user): #creates db entry for song e
+                print('succesful upload')
+                return redirect(url_for('uploaded_file',
                                     filename=filename))
+            else:
+                flash('Song already exists in the database')
+                return redirect(request.url)
     return render_template('upload.html')
 
     
+@app.route('/music')
+@login_required
+def music():
+    page = request.args.get('page', 1, type=int)
+    songs = Song.query.paginate(page, 10, False)
+    P = Song.query.count()
+    last_page = math.ceil(int(P) / int(10))
+    print(last_page)
+    page_url = "url_for('music', page="
+    next_url = url_for('music', page=songs.next_num) \
+      if songs.has_next else None
+    prev_url = url_for('music', page=songs.prev_num) \
+      if songs.has_prev else None
 
+    return render_template('music.html', confirmed_songs = P, songs = songs.items, page = page, next_url=next_url, prev_url=prev_url, last_page=last_page, cols = ['Song Name', '', 'Contact Address'])
         
 @app.route('/music/<filename>')
+@login_required
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)

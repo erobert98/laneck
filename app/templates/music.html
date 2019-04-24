@@ -1,23 +1,10 @@
 {% extends "base.html" %}
 {% block app_content %}
-    <div class="fixed-middle"> <h1 class= "text-center">  {{confirmed_posts}} Available Beats</h1></div>
 
-    <nav aria-label="...">
-        <ul class="pager">
-            <li class="next{% if not next_url %} disabled{% endif %}">
-                <a href="{{ next_url or '#' }}">
-                    Next Page <span aria-hidden="true">&rarr;</span>
-                </a>
-            </li>
-            <li class="previous{% if not prev_url %} disabled{% endif %}">
-                <a href="{{ prev_url or '#' }}">
-                    <span aria-hidden="true">&larr;</span> Previous Page
-                </a>
-            </li>
-        </ul>
-    </nav>
+<h1>Beats available for Leasing</h1>
 
-    <table class="table table-dark">
+
+<table class="table table-dark">
         <thead>
             <br>
             <tr>
@@ -27,28 +14,18 @@
             </tr>
         </thead>
         <tbody>
-            {% for post in posts%}
+            {%for song in songs %}
             <tr>
-                <td> {{post.body}} </td>
-                <!-- <td> {{post.about}} </td> -->
-                </tr>
+                <td>{{song.name}} </td>
+               <td> 
+                    <audio controls oncontextmenu="return false;" controlsList="nodownload">
+                    <source src="/static/{{song.location}}">
+                    </audio>
+                </td>
+                <td>Contact {{song.user.email}} for licensing rights</td>
+            </tr>
             {% endfor %}
-
         </tbody>
     </table>
-    <nav aria-label="...">
-        <ul class="pager">
-            <li class="next{% if not next_url %} disabled{% endif %}">
-                <a href="{{ next_url or '#' }}">
-                    Next Page <span aria-hidden="true">&rarr;</span>
-                </a>
-            </li>
-            <li class="previous{% if not prev_url %} disabled{% endif %}">
-                <a href="{{ prev_url or '#' }}">
-                    <span aria-hidden="true">&larr;</span> Previous Page
-                </a>
-            </li>
-        </ul>
-    </nav>
 
 {% endblock %}
