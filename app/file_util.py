@@ -1,4 +1,4 @@
-from app import db
+from app import db  
 from app.models import Song
 from sqlalchemy.exc import IntegrityError
 
