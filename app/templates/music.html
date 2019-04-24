@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block app_content %}
 
-<h1>Beats available for Leasing</h1>
+<h1>Beats available for Lease</h1>
 
 
 <table class="table table-dark">
@@ -9,7 +9,7 @@
             <br>
             <tr>
             {% for col in cols %}
-                <th scope="col">{{ col }}</th>
+                <th class = 'muscol' scope="col">{{ col }}</th>
             {% endfor %}
             </tr>
         </thead>
@@ -19,7 +19,7 @@
                 <td>{{song.name}} </td>
                <td> 
                     <audio controls oncontextmenu="return false;" controlsList="nodownload">
-                    <source src="/static/{{song.location}}">
+                    <source src="static/{{song.location}}">
                     </audio>
                 </td>
                 <td>Contact {{song.user.email}} for licensing rights</td>

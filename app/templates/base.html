@@ -1,26 +1,46 @@
 {% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
 
 {% block title %}
-    {% if title %}{{ title }} - Laneck Entertainment {% else %}Welcome to Laneck Entertainment Tools{% endif %}
+    {% if title %}{{ title }} - Laneck Entertainment {% else %}Welcome to Laneck Entertainment {% endif %}
 {% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('static', filename='mystyle.css')}}">
+{% endblock %}
+
+
 {% block navbar %}
 <div class="nav">
-    <!-- <button type="button" class="btn btn-default" aria-label="Left Align">
-      <span class="glyphicon glyphicon-globe" aria-hidden="true"> </span>
+    
+    <button type="button" class="btn btn-default" aria-label="Left Align">
+      <span class="glyphicon glyphicon-globe" aria-hidden="false"> </span>
       <a href="/index">View Homepage</a>
     </button>
-   
+
+    {% if current_user.is_anonymous %}
     <button type="button" class="btn btn-default" aria-label="Left Align">
       <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
       <a href="/login">Login</a>
-    </button> -->
-
-    <a href="{{ url_for('index') }}">Home</a>
-    {% if current_user.is_anonymous %}
-    <a href="{{ url_for('login') }}">Login</a>
+    </button>
     {% else %}
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <button type="button" class="btn btn-default" aria-label="Left Align">
+        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+        <a href="/logout">Logout</a>
+    </button>
     {% endif %}
+    {% if current_user.is_authenticated %}
+    <button type="button" class="btn btn-default" aria-label="Left Align">
+        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+        <a href="/music">View Tracks</a>
+    </button>
+    {% endif %}
+
+
+
 </div>
 {% endblock %}}
 

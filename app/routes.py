@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, request, url_for, send_from_directory
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, UploadForm
 from app.models import User, Role, Post, Song
 from werkzeug.urls import url_parse
 from flask_login import logout_user, current_user, login_user, login_required
@@ -77,17 +77,6 @@ def register():
 
 
 
-# @app.before_first_request
-# def restrict_admin_url():
-#     endpoint = 'admin.index'
-#     url = url_for(endpoint)
-#     admin_index = app.view_functions.pop(endpoint)
-
-#     @app.route(url, endpoint=endpoint)
-#     @roles_accepted('admin')
-#     def secure_admin_index():
-#         return admin_index()
-
 @app.route('/posts', methods=['GET', 'POST'])
 def posts():
     page = request.args.get('page', 1, type=int)
@@ -112,6 +101,7 @@ def upload_file():
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))
     UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static')
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    form = UploadForm()
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -136,7 +126,7 @@ def upload_file():
             else:
                 flash('Song already exists in the database')
                 return redirect(request.url)
-    return render_template('upload.html')
+    return render_template('upload.html', form = form)
 
     
 @app.route('/music')
@@ -160,6 +150,17 @@ def music():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
+
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500
 
 
 def allowed_file(filename):

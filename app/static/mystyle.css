@@ -1,0 +1,20 @@
+.btn-default {
+  color: rgb(255, 255, 255);
+  background-color: #1500cf;
+  border-color: #1900ff;
+}
+
+body {
+  background-color: black
+}
+
+h1 {
+  color: blue
+
+}
+
+tr, td {
+  color: white
+
+
+}
