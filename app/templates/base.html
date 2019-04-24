@@ -38,6 +38,13 @@
         <a href="/music">View Tracks</a>
     </button>
     {% endif %}
+    {% if current_user.isAdmin %}
+    <button type="button" class="btn btn-default" aria-label="Left Align">
+        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+        <a href="/upload">Upload A Song</a>
+      </button>
+    {%endif%}
+
 
 
 
