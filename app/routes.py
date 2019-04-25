@@ -10,6 +10,7 @@ import math
 import os
 from functools import wraps
 from app.file_util import store_fileInfo
+from app.helpers import upload_file_to_s3
 
 
 def requires_roles(*roles):
@@ -98,9 +99,6 @@ def posts():
 def upload_file():
     print(current_user.roles) #returns either admin or end-user but next line always goes through?
     # if current_user.roles is 'admin':
-    APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-    UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static')
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     form = UploadForm()
     if request.method == 'POST':
         # check if the post request has the file part
@@ -118,8 +116,11 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename)) #upload to aw3 function goes here
-            if store_fileInfo(filename, name, user): #creates db entry for song e
+            resstr, fileLOC = upload_file_to_s3(file, 'laneck')
+            # print(type(fileLOC))
+            fileLOC = ', '.join(fileLOC)
+            # print(fileLOC)
+            if store_fileInfo(fileLOC, name, user): #creates db entry for song e
                 print('succesful upload')
                 return redirect(url_for('music'))
             else:
@@ -135,7 +136,7 @@ def music():
     songs = Song.query.paginate(page, 10, False)
     P = Song.query.count()
     last_page = math.ceil(int(P) / int(10))
-    print(last_page)
+    # print(last_page)
     page_url = "url_for('music', page="
     next_url = url_for('music', page=songs.next_num) \
       if songs.has_next else None
@@ -144,11 +145,6 @@ def music():
 
     return render_template('music.html', confirmed_songs = P, songs = songs.items, page = page, next_url=next_url, prev_url=prev_url, last_page=last_page, cols = ['Song Name', '', 'Contact Address'])
         
-@app.route('/music/<filename>')
-@login_required
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
 
 
 
@@ -165,5 +161,4 @@ def internal_error(error):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in (app.config['ALLOWED_EXTENSIONS'])
-
 

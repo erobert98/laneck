@@ -6,6 +6,10 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     FLASK_ADMIN_SWATCH = 'cerulean'
     ALLOWED_EXTENSIONS = set(['mp3','wav'])
+    S3_BUCKET                 = 'laneck'
+    S3_KEY                    = 'AKIAJRUHIPGPLFV56AVQ'
+    S3_SECRET                 = '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'
+    S3_LOCATION               = 'http://{}.s3.amazonaws.com/'.format(S3_BUCKET)
 
 
 class Testing(object):
@@ -16,3 +20,7 @@ class Testing(object):
     FLASK_ADMIN_SWATCH = 'cerulean'
     ALLOWED_EXTENSIONS = set(['mp3', 'wav'])
     PRESERVE_CONTEXT_ON_EXCEPTION  = True
+    S3_BUCKET                 = 'laneck'
+    S3_KEY                    = 'AKIAJRUHIPGPLFV56AVQ'
+    S3_SECRET                 = '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'
+    S3_LOCATION               = 'http://{}.s3.amazonaws.com/'.format(S3_BUCKET)

@@ -1,11 +1,17 @@
 from app import db  
 from app.models import Song
 from sqlalchemy.exc import IntegrityError
+import re
 
 
-def store_fileInfo(filename, name, user):
+
+def store_fileInfo(fileLOC, name, user):
     try:
-        S = Song(location = filename, name = name, user_id = user) #filename includes file extension
+        # print(type(fileLOC))
+        if ' ' in fileLOC:
+            fileLOC = fileLOC.replace(' ','+')
+        S = Song(location = fileLOC, name = name, user_id = user) #filename includes file extension
+        print(S.location)
         db.session.add(S)
         db.session.commit()
         return True

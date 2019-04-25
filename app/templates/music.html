@@ -17,11 +17,11 @@
             {%for song in songs %}
             <tr>
                 <td>{{song.name}} </td>
-               <td> 
+                <td> 
                     <audio controls oncontextmenu="return false;" controlsList="nodownload">
-                    <source src="static/{{song.location}}">  #https://devcenter.heroku.com/articles/s3
-                    </audio>                                   #http://s3.amazonaws.com/bucketname/{{song.loaction}}
-                </td>                                           #http://zabana.me/notes/upload-files-amazon-s3-flask.html
+                    <source src="https://s3.amazonaws.com/laneck/{{song.location}}">
+                    </audio>                                   
+                </td>                                           
                 <td>Contact {{song.user.email}} for licensing rights</td>
             </tr>
             {% endfor %}
