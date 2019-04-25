@@ -1,1 +1,1 @@
-web: gunicorn laneck.app
+web: gunicorn laneck:app
