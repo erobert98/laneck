@@ -1,4 +1,5 @@
 import boto3, botocore
+from config import Config
 from app import app
 import os
 

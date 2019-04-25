@@ -14,7 +14,7 @@ import os
 app = Flask(__name__)
 Bootstrap(app)
 # sslify = SSLify(app)
-app.config.from_object('config.Testing')
+app.config.from_object('Config')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
