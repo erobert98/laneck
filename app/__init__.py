@@ -11,6 +11,7 @@ from flask_security import Security, SQLAlchemyUserDatastore
 
 import os
 
+
 app = Flask(__name__)
 Bootstrap(app)
 # sslify = SSLify(app)
