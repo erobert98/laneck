@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block app_content %}
     {% if current_user.is_authenticated %}
-    Welcome {{ current_user.username }}!
+    <h1 class = 'welcome'> Welcome {{ current_user.username }}! </h1>
     {% endif %}
     <div>
-    <h1>Welcome To Atlantic Beats!!</h1>
-    <a href='https://soundcloud.com/atlantic-beats'>Check out my soundcloud</a>
+    <h1 class= 'welcome'>Welcome To Atlantic Beats!!</h1>
+    <a class='welcome' href='https://soundcloud.com/atlantic-beats'>Check out my soundcloud</a>
     </div>
 
 {% endblock %}

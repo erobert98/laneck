@@ -18,30 +18,30 @@
     
     <button type="button" class="btn btn-default" aria-label="Left Align">
       <span class="glyphicon glyphicon-globe" aria-hidden="false"> </span>
-      <a href="/index">View Homepage</a>
+      <a class ='nav1' href="/index">View Homepage</a>
     </button>
 
     {% if current_user.is_anonymous %}
     <button type="button" class="btn btn-default" aria-label="Left Align">
       <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-      <a href="/login">Login</a>
+      <a class = 'nav1' href="/login">Login</a>
     </button>
     {% else %}
     <button type="button" class="btn btn-default" aria-label="Left Align">
         <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-        <a href="/logout">Logout</a>
+        <a class = 'nav1' href="/logout">Logout</a>
     </button>
     {% endif %}
     {% if current_user.is_authenticated %}
     <button type="button" class="btn btn-default" aria-label="Left Align">
         <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-        <a href="/music">View Tracks</a>
+        <a class = 'nav1' href="/music">View Tracks</a>
     </button>
     {% endif %}
     {% if current_user.isAdmin %}
     <button type="button" class="btn btn-default" aria-label="Left Align">
         <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-        <a href="/upload">Upload A Song</a>
+        <a class = 'nav1' href="/upload">Upload A Song</a>
       </button>
     {%endif%}
 
