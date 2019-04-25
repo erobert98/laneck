@@ -1,5 +1,11 @@
 {% extends 'bootstrap/base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('static', filename='mystyle.css')}}">
+
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139147278-1"></script>
 <script>
@@ -18,14 +24,10 @@
   });
 </script>
 
-{% block title %}
-    {% if title %}{{ title }} - Laneck Entertainment {% else %}Welcome to Laneck Entertainment {% endif %}
 {% endblock %}
 
-{% block styles %}
-{{super()}}
-<link rel="stylesheet"
-      href="{{url_for('static', filename='mystyle.css')}}">
+{% block title %}
+    {% if title %}{{ title }} - Laneck Entertainment {% else %}Welcome to Laneck Entertainment {% endif %}
 {% endblock %}
 
 
