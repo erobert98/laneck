@@ -13,9 +13,11 @@ class Role(db.Model, RoleMixin):
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
-    def isAdmin(self):
+    def isAdminR(self):
         if self.name == 'admin':
             return True
+        else:
+            return False
     
     def __repr__(self):
         return '<Role {}>'.format(self.name)   

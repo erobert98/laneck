@@ -97,7 +97,7 @@ def posts():
 @login_required
 @requires_roles('admin')
 def upload_file():
-    print(current_user.roles) #returns either admin or end-user but next line always goes through?
+    print(current_user.isAdmin) #returns either admin or end-user but next line always goes through?
     # if current_user.roles is 'admin':
     form = UploadForm()
     if request.method == 'POST':
